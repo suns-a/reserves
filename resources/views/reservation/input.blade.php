@@ -17,9 +17,9 @@
     <div><input type="text" name="name" placeholder></div>
     日付
     <div><input type="date" name="day" placeholder></div>
-    開始時刻
+    開始時間
     <div><input type="time" name="starttime"></div>
-    終了時刻
+    終了時間
     <div><input type="time" name="endtime"></div>
     内容
     <div>

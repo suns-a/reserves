@@ -19,3 +19,4 @@ Route::get('/', function () {
 });
 
 Route::get('/reserve', [ReservationController::class, 'input']);
+Route::get('/calendar', [ReservationController::class, 'display']);

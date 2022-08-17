@@ -10,4 +10,9 @@ class ReservationController extends Controller
     {
         return view('reservation.input');
     }
+
+    public function display()
+    {
+        return view('reservation.display');
+    }
 }

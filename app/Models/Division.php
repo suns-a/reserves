@@ -15,4 +15,9 @@ class Division extends Model
         'id',
         'name'
     ];
+
+    public function reservation()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }

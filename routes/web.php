@@ -18,4 +18,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/reserve', [ReservationController::class, 'input']);
+Route::get('/reserve', [ReservationController::class, 'create']);
+Route::post('/reserve', [ReservationController::class, 'input']);

@@ -15,7 +15,11 @@ class Reservation extends Model
         'id',
         'user_id',
         'division_id',
-        'room_id',
         'usage_id'
     ];
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }
 }

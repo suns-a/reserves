@@ -12,11 +12,8 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::create('rooms', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->comment('部屋名');
-            $table->unsignedInteger('time_steps')->comment('時間枠');
-            $table->timestamps();
+        Schema::table('reservations', function (Blueprint $table) {
+            $table->time('starts_at')->comment('開始時間');
         });
     }
 
@@ -27,6 +24,8 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('rooms');
+        Schema::table('reservations', function (Blueprint $table) {
+            $table->dropColumn('starts_at');
+        });
     }
 };

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Division;
 use App\Models\Usage;
 use Illuminate\Http\Request;
+// use App\Http\Requests\ReservationRequest;
 use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
@@ -19,10 +20,10 @@ class ReservationController extends Controller
     public function input(Request $request)
     {
         //division
-        $division = new Division();
-        $division->id = $request->id;
-        $division->name = $request->division;
-        $division->save();
+        // $division = new Division();
+        // $division->id = $request->id;
+        // $division->name = $request->division;
+        // $division->save();
         //name
         $user = new User();
         $user->id = $request->id;
@@ -30,16 +31,16 @@ class ReservationController extends Controller
         $user->save();
         //reserve
         $reserve = new Reservation();
-        $reserve->user_id = $request->user_id;
-        $reserve->division_id = $request->division_id;
-        $reserve->usage_id = $request->usage_id;
+        $reserve->users_id = $request->user_id;
+        // $reserve->divisions_id = $request->division_id;
+        // $reserve->usages_id = $request->usage_id;
         $reserve->date = $request->date;
         $reserve->starts_at = $request->starts_at;
         $reserve->ends_at = $request->ends_at;
         $reserve->save();
         //usage
-        $usage = new Usage();
-        $usage->name = $request->usage;
-        $usage->save();
+        // $usage = new Usage();
+        // $usage->name = $request->usage;
+        // $usage->save();
     }
 }

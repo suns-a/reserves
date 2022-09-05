@@ -74,6 +74,7 @@
         <p>{{ Form::button('リセット', ['class' => 'btn btn-outline-success btn-lg', 'type' => 'reset']) }}</p>
         <p>{{ Form::button('予約', ['name' => 'regist', 'class' => 'btn btn-success btn-lg', 'type' => 'submit']) }}</p>
 </form>
+@csrf
 
 <?php
 date_default_timezone_set('Asia/Tokyo');

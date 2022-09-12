@@ -165,5 +165,13 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => ['division' => '事業部',
+    'name' => '名前',
+    'date' => '日付',
+    'starts_at' => '開始時間',
+    'ends_at' => '終了時間',
+    'usage' => '内容',],
+    'required' => ':attributeを入力してください。',
+    'before' => ':attributeは終了時間より前の時間を入力してください。',
+    'after' => ':attributeは開始時間より後の時間を入力してください。'
 ];

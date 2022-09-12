@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ReservationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ReservationRequest extends FormRequest
@@ -17,15 +16,6 @@ class ReservationRequest extends FormRequest
         return true;
     }
 
-    public function all($keys = null)
-    {
-        $results = parent::all($keys);
-        $results['date_at'] = $results['date'];
-        $results['start_time'] = $results['starts_at'];
-        $results['end_time'] = $results['ends_at'];
-        return $results;
-    }
-
     /**
       * Get the validation rules that apply to the request.
       *
@@ -34,17 +24,12 @@ class ReservationRequest extends FormRequest
     public function rules()
     {
         return [
-            'resrvation_id' => 'resrvation_id',
+            'division' => 'required',
+            'name' => 'required',
             'date' => 'required|date',
-            'starts_at' => 'required|date_format:H:i',
-            'ends_at' => 'required|date_format:H:i',
-            'start_at' => [
-                new ReservationRule(
-                    $this->date_at,
-                    $this->start_time,
-                    $this->end_time
-                )
-            ]
+            'starts_at' => 'required|date_format:H:i|before:ends_at|unique:reservations,starts_at,NULL,starts_at,date,' . $this->input('date'),
+            'ends_at' => 'required|date_format:H:i|after:starts_at|unique:reservations,ends_at,NULL,date,date,' . $this->input('date'),
+            'usage' => 'required'
         ];
     }
 }

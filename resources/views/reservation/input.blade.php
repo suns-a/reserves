@@ -2,49 +2,15 @@
 {{ Form::open(['url' => '/reserve', 'method' => 'post']) }}
 <div style="text-align: center; font-size:50px">会議室予約</div>
     事業部
-    <p>{{ Form::select('division', 
-        ['' => '選択してください',
-         '人事部' => '人事部', 
-         '総務部' => '総務部', 
-         '営業部' => '営業部', 
-         '開発事業部' => '開発事業部', 
-         'リフォーム事業部' => 'リフォーム事業部', 
-         '制作事業部' => '制作事業部', 
-         'IT事業部' => 'IT事業部', 
-         'ペット事業部' => 'ペット事業部'], 
-    'ordinarily', 
-    ['class' => 'my_class','id' => 'division'])}}
+    <p>{{ Form::select('division', $divisions, 
+        null, 
+       ['placeholder' => '選択してください'])}}
     </p>
     
     <p>予約者名<br />
-        {{ Form::select('name',
-        ['' => '',
-        '中村 浩' => '中村 浩',
-        '島本 元気' => '島本 元気',
-        '武智 克樹' => '武智 克樹',
-        '河崎 雄大' => '河崎 雄大',
-        '小原 健太' => '小原 健太',
-        '武 浩子' => '武 浩子',
-        'チェ ヘジ' => 'チェ ヘジ',
-        '河野 亜由美' => '河野 亜由美',
-        '山田 由佳' => '山田 由佳',
-        '牧野 穂乃佳' => '牧野 穂乃佳',
-        '奥野 加奈子' => '奥野 加奈子',
-        '小川 莉緒奈' => '小川 莉緒奈',
-        '松浦 隼' => '松浦 隼',
-        '平見 萌絵' => '平見 萌絵',
-        '岡田 一輝' => '岡田 一輝',
-        '佐藤 誠' => '佐藤 誠',
-        '田口 潤平' => '田口 潤平',
-        '檜作 仁志' => '檜作 仁志',
-        '藤沼 卓巳' => '藤沼 卓巳',
-        '奥村 彩音' => '奥村 彩音',
-        'シ シュンカン' => 'シ シュンカン',
-        '安部 雄太' => '安部 雄太',
-        '村上 悠太' => '村上 悠太',
-        '伊津見 泰葉' => '伊津見 泰葉'],
-    'ordinarily',
-    ['class' => 'my_class','id' => 'name'])}}
+        {{ Form::select('name', $users,
+        null, 
+       ['placeholder' => '選択してください'])}}
     </p>
 
     <p>日付<br />
@@ -60,18 +26,21 @@
     </p>
 
     </p>内容<br />
-    <p>{{ Form::select('usage', 
-        ['' => '選択してください',
-         '面接' => '面接', 
-         'ミーティング' => 'ミーティング', 
-         '来客' => '来客', 
-         'テレアポ' => 'テレアポ', 
-         'その他' => 'その他', ], 
-    'ordinarily', 
-    ['class' => 'my_class','id' => 'usage'])}}
+    <p>{{ Form::select('usage', $usages, 
+        null, 
+       ['placeholder' => '選択してください'])}}
     </p>
     <br>
         <p>{{ Form::button('リセット', ['class' => 'btn btn-outline-success btn-lg', 'type' => 'reset']) }}</p>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
         <p>{{ Form::button('予約', ['name' => 'regist', 'class' => 'btn btn-success btn-lg', 'type' => 'submit']) }}</p>
 </form>
 @csrf

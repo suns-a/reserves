@@ -27,8 +27,8 @@ class ReservationRequest extends FormRequest
             'division' => 'required',
             'name' => 'required',
             'date' => 'required|date',
-            'starts_at' => 'required|date_format:H:i|before:ends_at|unique:reservations,starts_at,NULL,starts_at,date,' . $this->input('date'),
-            'ends_at' => 'required|date_format:H:i|after:starts_at|unique:reservations,ends_at,NULL,date,date,' . $this->input('date'),
+            'starts_at' => 'required|date_format:H:i|before:ends_at,',
+            'ends_at' => 'required|date_format:H:i|after:starts_at,',
             'usage' => 'required'
         ];
     }

@@ -20,3 +20,4 @@ Route::get('/', function () {
 
 Route::get('/reserve', [ReservationController::class, 'create']);
 Route::post('/reserve', [ReservationController::class, 'input']);
+Route::delete('/reserve', [ReservationController::class, 'destroy']);

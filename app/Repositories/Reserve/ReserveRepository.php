@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Reserve;
 
+use App\Repositories\Reserve\ReserveRepositoryInterface;
 use App\Models\Reservation;
 use App\Models\Division;
 use App\Models\User;
@@ -10,38 +11,44 @@ use Illuminate\Support\Facades\DB;
 
 class ReserveRepository implements ReserveRepositoryInterface
 {
-    public function getReservations()
-    {
-        return Reservation::all();
-    }
+    // public function checkSchedule($date, $num)
+    // {
+    //     if(Reservation::where(['date' => $date])->count() != 0)
+    //     {
+    //         return false;
+    //     }
+    //     for($i = 1; $i < $num; $i++)
+    //     {
+    //         if(Reservation::where(['date' => date('Y-m-d', strtotime($date.'+'.$i.' date'))])->count() != 0)
+    //         {
+    //             return false;
+    //         }
+    //     }
 
-    public function inputDivision(Request $request)
-    {
-        $division = new Division();
-        $division->name = $request->name;
-        $division->save();
-    }
+    //     return true;
+    // }
 
-    public function inputName(Request $request)
-    {
-        $user = new User();
-        $user->name = $request->name;
-        $user->save();
-    }
+    // Scope
+    public function checkSchedule($query, $start, $end) {
 
-    public function inputDate()
-    {
-    }
+        $query->where(function($q) use($start, $end) { // 解説 - 1
 
-    public function inputStart()
-    {
-    }
+            $q->where('starts_at', '>=', $start)
+                ->where('starts_at', '<', $end);
 
-    public function inputEnd()
-    {
-    }
+        })
+        ->orWhere(function($q) use($start, $end) { // 解説 - 2
 
-    public function inputContent()
-    {
+            $q->where('ends_at', '>', $start)
+                ->where('ends_at', '<=', $end);
+
+        })
+        ->orWhere(function($q) use ($start, $end) { // 解説 - 3
+
+            $q->where('starts_at', '<', $start)
+                ->where('ends_at', '>', $end);
+
+        });
+
     }
 }

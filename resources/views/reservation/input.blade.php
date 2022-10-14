@@ -1,7 +1,7 @@
 <title>会議室予約</title>
 {{ Form::open(['url' => '/reserve', 'method' => 'post']) }}
 <div style="text-align: center; font-size:50px">会議室予約</div>
-    事業部
+    <div style="padding:10px">事業部
     <p>{{ Form::select('division', $divisions, 
         null, 
        ['placeholder' => '選択してください'])}}
@@ -42,7 +42,12 @@
     </div>
 @endif
         <p>{{ Form::button('予約', ['name' => 'regist', 'class' => 'btn btn-success btn-lg', 'type' => 'submit']) }}</p>
-</form>
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+{{ Form::close() }}
 @csrf
 
 <?php

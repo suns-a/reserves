@@ -27,17 +27,18 @@ class ReservationController extends Controller
 
         if (DB::table('reservations')
         ->where('date', $request->date)
-        ->orWhere('starts_at', $request->starts_at)
-        ->orWhere('ends_at', $request->ends_at)
-        ->exists() 
-        // && [$request->date === $reserve->date, $request->starts_at < $reserve->starts_at]
-        // && [$request->date === $reserve->date, $reserve->starts_at < $request->ends_at]
-        // && [$request->date === $reserve->date, $request->ends_at < $reserve->ends_at]
-        ) {
+        ->where('starts_at', $request->starts_at)
+        ->where('ends_at', $request->ends_at)
+        ->exists()
+        && [$request->starts_at >= $reserve->starts_at]
+        && [$reserve->starts_at < $request->ends_at]
+        && [$request->ends_at <= $reserve->ends_at]
+        ) 
+          {
             return redirect()->back()
                         ->with(['error' => '予約済みの日時です。'])
                         ->withInput(); 
-        }
+          }
 
         //reserve
         else {

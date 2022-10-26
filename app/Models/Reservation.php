@@ -26,25 +26,21 @@ class Reservation extends Model
         return $this->belongsTo('App\Models\Division');
     }
 
-    public function scopeWhereHasReservation($query, $start, $end) {
+    public function input($query, $request, $reserve) {
 
-        $query->where(function($q) use($start, $end) {
-
-            $q->where('starts_at', '>=', $start)
-                ->where('starts_at', '<', $end);
-
-        })
-        ->orWhere(function($q) use($start, $end) {
-
-            $q->where('ends_at', '>', $start)
-                ->where('ends_at', '<=', $end);
-
-        })
-        ->orWhere(function($q) use ($start, $end) {
-
-            $q->where('starts_at', '<', $start)
-                ->where('ends_at', '>', $end);
-
+        $checkExist = DB::table('reservations')
+        ->where('date', $request->date)
+        ->where(function ($query) use ($request, $reserve) {
+            $query->where(function ($subQuery) use ($request, $reserve) {
+                $subQuery->where($request->starts_at, '<', $reserve->starts_at)
+                         ->where($request->ends_at, '>', $reserve->ends_at);
+            })->orWhere(function ($subQuery) use ($request, $reserve) {
+                $subQuery->where($request->ends_at, '<', $reserve->ends_at)
+                         ->where($request->ends_at, '>', $reserve->starts_at);
+            })->orWhere(function ($subQuery) use ($request, $reserve) {
+                $subQuery->where($request->starts_at, '<', $reserve->ends_at)
+                         ->where($request->ends_at, '>', $reserve->ends_at);
+            });
         });
 
     }

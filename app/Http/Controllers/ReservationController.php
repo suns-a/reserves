@@ -24,24 +24,21 @@ class ReservationController extends Controller
     public function input(ReservationRequest $request)
     {
         $reserve = new Reservation();
+        $checkExist = DB::table('reservations')
+        ->whereDate('date', $request['date'])
+        ->whereTime('ends_at', '>', $request['starts_at'])
+        ->whereTime('starts_at', '<', $request['ends_at'])
+        ->exists();
 
-        if (DB::table('reservations')
-        ->where('date', $request->date)
-        ->where('starts_at', $request->starts_at)
-        ->where('ends_at', $request->ends_at)
-        ->exists()
-        && [$request->starts_at >= $reserve->starts_at]
-        && [$reserve->starts_at < $request->ends_at]
-        && [$request->ends_at <= $reserve->ends_at]
-        ) 
-          {
+        if ($checkExist) {
             return redirect()->back()
                         ->with(['error' => '予約済みの日時です。'])
-                        ->withInput(); 
-          }
+                        ->withInput();
+        }
 
         //reserve
         else {
+            $reserve = new Reservation();
             $reserve->user_id = $request->name;
             $reserve->division_id = $request->division;
             $reserve->usage_id = $request->usage;

@@ -9,7 +9,7 @@ use App\Models\Usage;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use App\Services\ReservationService;
 
 class ReservationController extends Controller
 {
@@ -23,12 +23,11 @@ class ReservationController extends Controller
 
     public function input(ReservationRequest $request)
     {
-        $reserve = new Reservation();
-        $checkExist = DB::table('reservations')
-        ->whereDate('date', $request['date'])
-        ->whereTime('ends_at', '>', $request['starts_at'])
-        ->whereTime('starts_at', '<', $request['ends_at'])
-        ->exists();
+        $checkExist = ReservationService::checkReserveDuplication(
+            $request['date'],
+            $request['starts_at'],
+            $request['ends_at']
+        );
 
         if ($checkExist) {
             return redirect()->back()

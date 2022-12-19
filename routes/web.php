@@ -14,10 +14,12 @@ use App\Http\Controllers\ReservationController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/api/reserve', function () {
+    return view('reservation.input');
 });
 
+Route::get('/reserve', [ReservationController::class, 'index']);
 Route::get('/reserve', [ReservationController::class, 'create']);
-Route::post('/reserve', [ReservationController::class, 'input']);
-Route::delete('/reserve', [ReservationController::class, 'destroy']);
+// Route::get('/reserve', [ReservationController::class, 'calendar']);
+// Route::post('/reserve', [ReservationController::class, 'input']);
+// Route::delete('/reserve', [ReservationController::class, 'destroy']);

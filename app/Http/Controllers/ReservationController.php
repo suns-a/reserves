@@ -7,12 +7,18 @@ use App\Models\User;
 use App\Models\Division;
 use App\Models\Usage;
 use Illuminate\Http\Request;
-use App\Http\Requests\ReservationRequest;
 use Illuminate\Support\Facades\DB;
-use App\Services\ReservationService;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
+    public function index()
+    {
+        $reserves = DB::table('reservations')
+        ->select('user_id', 'division_id', 'usage_id', 'date', 'starts_at', 'ends_at')->get();
+        return view('reservation.input',compact('reserves','divisions', 'usages', 'users'));
+    }
+    
     public function create()
     {
         $users = User::all()->pluck('name', 'id')->toArray();
@@ -21,37 +27,10 @@ class ReservationController extends Controller
         return view('reservation.input', compact('divisions', 'usages', 'users'));
     }
 
-    public function input(ReservationRequest $request)
+    public function calendar()
     {
-        $checkExist = ReservationService::checkReserveDuplication(
-            $request['date'],
-            $request['starts_at'],
-            $request['ends_at']
-        );
-
-        if ($checkExist) {
-            return redirect()->back()
-                        ->with(['error' => '予約済みの日時です。'])
-                        ->withInput();
-        }
-
-        //reserve
-        else {
-            $reserve = new Reservation();
-            $reserve->user_id = $request->name;
-            $reserve->division_id = $request->division;
-            $reserve->usage_id = $request->usage;
-            $reserve->date = $request->date;
-            $reserve->starts_at = $request->starts_at;
-            $reserve->ends_at = $request->ends_at;
-            $reserve->save();
-            return redirect()->back();
-        }
-    }
-
-    public function destroy(Request $request)
-    {
-        $request->reservation_id;
-        $request->delete();
+        $reserves = DB::table('reservations')
+        ->select('user_id', 'division_id', 'usage_id', 'date', 'starts_at', 'ends_at')->get();
+        return view('reservation.display');
     }
 }

@@ -7,6 +7,5 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface ReserveRepositoryInterface
 {
-    public function getAll(): Collection;
-    public function store(array $data): Reservation;
+    public function checkSchedule($query, $start, $end);
 }

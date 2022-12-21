@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Division extends Model
 {
     use HasFactory;
-
-    protected $table = "divisions";
+    
 
     protected $fillable = [
         'id',
@@ -18,6 +17,6 @@ class Division extends Model
 
     public function reservation()
     {
-        return $this->belongsTo(Reservation::class, 'division_id', 'division_id');
+        return $this->belongsTo('App\Models\Reservation');
     }
 }

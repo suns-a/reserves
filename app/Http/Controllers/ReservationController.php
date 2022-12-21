@@ -7,40 +7,30 @@ use App\Models\User;
 use App\Models\Division;
 use App\Models\Usage;
 use Illuminate\Http\Request;
-// use App\Http\Requests\ReservationRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
+    public function index()
+    {
+        $reserves = DB::table('reservations')
+        ->select('user_id', 'division_id', 'usage_id', 'date', 'starts_at', 'ends_at')->get();
+        return view('reservation.input',compact('reserves','divisions', 'usages', 'users'));
+    }
+    
     public function create()
     {
-        return view('reservation.input');
+        $users = User::all()->pluck('name', 'id')->toArray();
+        $divisions = Division::all()->pluck('name', 'id')->toArray();
+        $usages = Usage::all()->pluck('name', 'id')->toArray();
+        return view('reservation.input', compact('divisions', 'usages', 'users'));
     }
 
-    public function input(Request $request)
+    public function calendar()
     {
-        //division
-        // $division = new Division();
-        // $division->id = $request->id;
-        // $division->name = $request->division;
-        // $division->save();
-        //name
-        $user = new User();
-        $user->id = $request->id;
-        $user->name = $request->name;
-        $user->save();
-        //reserve
-        $reserve = new Reservation();
-        $reserve->users_id = $request->user_id;
-        // $reserve->divisions_id = $request->division_id;
-        // $reserve->usages_id = $request->usage_id;
-        $reserve->date = $request->date;
-        $reserve->starts_at = $request->starts_at;
-        $reserve->ends_at = $request->ends_at;
-        $reserve->save();
-        //usage
-        // $usage = new Usage();
-        // $usage->name = $request->usage;
-        // $usage->save();
+        $reserves = DB::table('reservations')
+        ->select('user_id', 'division_id', 'usage_id', 'date', 'starts_at', 'ends_at')->get();
+        return view('reservation.display');
     }
 }

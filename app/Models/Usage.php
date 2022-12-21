@@ -15,4 +15,9 @@ class Usage extends Model
         'id',
         'name',
     ];
+
+    public function reservation()
+    {
+        return $this->belongsTo('App\Models\Reservation');
+    }
 }

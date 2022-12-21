@@ -5,45 +5,43 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Reservation extends Model
 {
     use HasFactory;
 
-    protected $table = "reservations";
-
+    protected $guarded = ['id'];
     protected $fillable = [
         'id',
         'user_id',
         'division_id',
-        'usage_id'
+        'usage_id',
+        'date',
+        'starts_at',
+        'ends_at'
     ];
 
     public function division()
     {
-        // return $this->hasMany(Division::class, 'division_id', 'division_id');
-        // dd($maxId);
-        // $maxId = DB::table("INFORMATION_SCHEMA.TABLES")
-        //     ->select("AUTO_INCREMENT")
-        //     ->where("TABLE_SCHEMA", "reserve")
-        //     ->where("TABLE_NAME", "reservations")
-        //     ->first()->AUTO_INCREMENT;
-        // return $maxId;
+        return $this->belongsTo('App\Models\Division');
     }
 
-    // Scope
-    // public function scopeWhereHasReservation($query, $start, $end)
-    // {
-    //     $query->where(function ($q) use ($start, $end) {
-    //         $q->where('date_at', 'start_time', '>=', $start)
-    //             ->where('date_at', 'start_time', '<', $end);
-    //     })
-    //     ->orWhere(function ($q) use ($start, $end) {
-    //         $q->where('date_at', 'end_time', '>', $start)
-    //             ->where('date_at', 'end_time', '<=', $end);
-    //     })
-    //     ->orWhere(function ($q) use ($start, $end) {
-    //         $q->where('date_at', 'start_time', '<', $start)
-    //             ->where('date_at', 'end_time', '>', $end);
-    //     });
-    // }
+    public function input($query, $request, $reserve) {
+
+        $checkExist = DB::table('reservations')
+        ->where('date', $request->date)
+        ->where(function ($query) use ($request, $reserve) {
+            $query->where(function ($subQuery) use ($request, $reserve) {
+                $subQuery->where($request->starts_at, '<', $reserve->starts_at)
+                         ->where($request->ends_at, '>', $reserve->ends_at);
+            })->orWhere(function ($subQuery) use ($request, $reserve) {
+                $subQuery->where($request->ends_at, '<', $reserve->ends_at)
+                         ->where($request->ends_at, '>', $reserve->starts_at);
+            })->orWhere(function ($subQuery) use ($request, $reserve) {
+                $subQuery->where($request->starts_at, '<', $reserve->ends_at)
+                         ->where($request->ends_at, '>', $reserve->ends_at);
+            });
+        });
+
+    }
 }
